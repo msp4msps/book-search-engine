@@ -11,7 +11,7 @@ const resolvers = {
         );
         return userData;
       }
-      throw new AuthenticationError("Apologies but you are not logged in");
+      throw new AuthenticationError("You need to be logged in!");
     },
   },
 
@@ -39,10 +39,11 @@ const resolvers = {
       return { token, user };
     },
     saveBook: async (parent, { bookData }, context) => {
+      console.log(bookData);
       if (context.user) {
         const book = await User.findOneAndUpdate(
           { _id: context.user._id },
-          { $addToSet: { savedBooks: bookData } },
+          { $push: { savedBooks: bookData } },
           { new: true, runValidators: true }
         );
 
